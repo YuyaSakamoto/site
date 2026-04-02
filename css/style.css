@@ -1,0 +1,397 @@
+/* =========================
+css/style.css
+- 見た目専用ファイル
+- 変更時は「変数 → レイアウト → 部品 → セクション → レスポンシブ」の順で確認
+- 改修ルール：
+  1. 色と余白は :root の変数を優先して使う
+  2. 新しいUIは既存クラスを壊さずに追加クラスで拡張する
+  3. セクション固有の修正はセクションブロック内に書く
+  4. スマホ調整は最後の @media にまとめる
+========================= */
+
+/* =========================
+   ■ デザイン変数
+   用途：色・余白・文字サイズを一元管理
+   改修ルール：値を変えると全体に影響するので、局所対応は個別クラスで行う
+========================= */
+:root {
+    --main: #2f5d2f;
+    --sub: #f5f5f5;
+    --text: #222;
+    --muted: #555;
+    --line: #e9e9e9;
+    --white: #ffffff;
+
+    --space-s: 8px;
+    --space-m: 16px;
+    --space-l: 32px;
+    --space-xl: 64px;
+
+    --radius-m: 12px;
+    --transition: 0.25s ease;
+}
+
+/* =========================
+     ■ 基本設定
+     用途：サイト全体の既定値
+     改修ルール：本文の可読性に直結するので急激な変更は避ける
+  ========================= */
+body {
+    margin: 0;
+    font-family: -apple-system, "Hiragino Sans", "Yu Gothic", sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--white);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* =========================
+     ■ 共通レイアウト
+     用途：横幅制御と中央寄せ
+     改修ルール：全セクションに影響するため幅変更は慎重に行う
+  ========================= */
+.container {
+    width: min(1100px, calc(100% - 32px));
+    margin: auto;
+}
+
+.section {
+    padding: var(--space-xl) 0;
+}
+
+.section--bg {
+    background: var(--sub);
+}
+
+.section__title {
+    margin: 0 0 var(--space-m);
+}
+
+.section__text {
+    color: var(--muted);
+}
+
+/* =========================
+     ■ ヘッダー
+     用途：ロゴ・ナビ・SNSの上部導線
+     改修ルール：項目追加時は横幅あふれに注意
+  ========================= */
+.header {
+    border-bottom: 1px solid var(--line);
+    background: var(--white);
+}
+
+.header__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-m);
+    padding: var(--space-m) 0;
+}
+
+.logo {
+    font-weight: 700;
+}
+
+.nav {
+    display: flex;
+    gap: var(--space-m);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav a {
+    transition: color var(--transition);
+}
+
+.nav a:hover {
+    color: var(--main);
+}
+
+/* =========================
+     ■ SNSリンク
+     用途：外部導線
+     改修ルール：アイコン化する場合も .sns 構造は維持すると管理しやすい
+  ========================= */
+.sns {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.sns a {
+    font-size: 14px;
+    opacity: 0.75;
+    transition: transform var(--transition), opacity var(--transition);
+}
+
+.sns a:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+/* =========================
+     ■ ヒーロー
+     用途：第一印象と主要CTA
+     改修ルール：背景画像を変更する際は文字の可読性を必ず確認する
+  ========================= */
+.hero {
+    background: url("https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1600&q=80") center / cover;
+    color: var(--white);
+}
+
+.hero__overlay {
+    background: rgba(0, 0, 0, 0.48);
+    padding: var(--space-xl) 0;
+}
+
+.hero__inner {
+    text-align: center;
+}
+
+.hero__label {
+    display: inline-block;
+    margin-bottom: var(--space-m);
+    padding: 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 999px;
+}
+
+.hero__title {
+    margin: 0 0 var(--space-m);
+    font-size: 2.2rem;
+}
+
+.hero__text,
+.hero__note {
+    margin: 0 0 var(--space-m);
+}
+
+.hero__actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-m);
+    flex-wrap: wrap;
+    margin-top: var(--space-l);
+}
+
+/* =========================
+     ■ ボタン
+     用途：共通CTA
+     改修ルール：新色追加は --modifier で増やし、既存スタイルは維持する
+  ========================= */
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 700;
+    transition: transform var(--transition), opacity var(--transition), background var(--transition), color var(--transition);
+}
+
+.btn--primary {
+    background: var(--white);
+    color: var(--main);
+}
+
+.btn--ghost {
+    border: 1px solid var(--white);
+    color: var(--white);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.92;
+}
+
+/* =========================
+     ■ 農園紹介
+     用途：文章と写真の2カラム構成
+     改修ルール：画像差し替え時は比率維持を優先する
+  ========================= */
+.about {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: var(--space-l);
+    align-items: center;
+}
+
+.about__image {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: var(--radius-m);
+}
+
+/* =========================
+     ■ 商品グリッド・カード
+     用途：商品一覧表示
+     改修ルール：カードを増減しても崩れないよう grid 基準で調整する
+  ========================= */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-m);
+}
+
+.card {
+    background: var(--white);
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+}
+
+.card__image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.card__body {
+    padding: var(--space-m);
+}
+
+.card__title {
+    margin: 0 0 var(--space-s);
+}
+
+.card__text {
+    margin: 0;
+    color: var(--muted);
+}
+
+.section__cta {
+    text-align: center;
+    margin-top: var(--space-l);
+}
+
+.cta__text {
+    margin-bottom: var(--space-m);
+    color: var(--muted);
+}
+
+/* =========================
+     ■ 会社概要
+     用途：法人情報と地図表示
+     改修ルール：項目追加は info-table__row を複製して対応する
+  ========================= */
+.info-table {
+    border-top: 1px solid var(--line);
+}
+
+.info-table__row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: var(--space-m);
+    padding: var(--space-m) 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.info-table__head {
+    font-weight: 700;
+}
+
+.info-table__data {
+    color: var(--muted);
+}
+
+.map {
+    margin-top: var(--space-l);
+    border-radius: var(--radius-m);
+    overflow: hidden;
+}
+
+/* =========================
+     ■ 問い合わせ
+     用途：メール・電話の最終導線
+     改修ルール：電話番号は tel: と表示文言をセットで更新する
+  ========================= */
+.contact__lead {
+    color: var(--muted);
+}
+
+#contact a[href^="tel"] {
+    font-weight: 700;
+    color: var(--main);
+}
+
+/* =========================
+     ■ フッター
+     用途：再導線とコピーライト
+     改修ルール：情報量を増やしすぎない
+  ========================= */
+.footer {
+    border-top: 1px solid var(--line);
+    padding: var(--space-m) 0;
+}
+
+.footer__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-m);
+}
+
+/* =========================
+     ■ レスポンシブ
+     用途：スマホ最適化
+     改修ルール：スマホ追加調整はこのブロックに集約する
+  ========================= */
+@media (max-width: 800px) {
+    .header__inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .hero__actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .about {
+        grid-template-columns: 1fr;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card__image {
+        height: 180px;
+    }
+
+    .info-table__row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .footer__inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
